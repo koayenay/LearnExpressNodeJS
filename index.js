@@ -1,12 +1,32 @@
 const express = require("express")
 const path = require("path")
 const logger = require("./middleware/logger")
+const engine = require("express-handlebars").engine
+const engine = require("express-handlebars").engine
+
 const app = express()
 
 // Init middleware
 // app.use(logger)
 
-//youtu.be/L72fhGm1tfE?t=2251
+// Handlebars middleware
+// app.engine("handlebars", exphbs({ defaultLayout: "main" }))
+// app.set("view engine", "handlebars")
+const hbs = create({
+  defaultLayout: "main",
+})
+
+// Register `hbs.engine` with the Express app.
+app.engine("handlebars", hbs.engine)
+app.set("view engine", "handlebars")
+app.set("views", "./views")
+
+// Body parser middleware
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+
+// Homepage ROUTE
+app.get("/", (req, res) => res.render("index"))
 //Set static folder
 app.use(express.static(path.join(__dirname, "public")))
 
